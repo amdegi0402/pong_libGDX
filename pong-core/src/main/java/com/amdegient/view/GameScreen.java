@@ -3,6 +3,7 @@ package com.amdegient.view;
 import com.amdegient.MyGame;
 import com.amdegient.controller.GameController;
 import com.amdegient.model.GameModel;
+import com.amdegient.util.MusicManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -21,6 +22,7 @@ public class GameScreen implements Screen{
 	private boolean gameStarted = false; //ゲームが開始されたか管理
 	private SpriteBatch batch;
 	private float startTimer = 2;//ゲーム再開までのタイマー
+	private final MusicManager musicManager = MusicManager.getInstance();
 	
 	// コンストラクタでゲーム本体を受け取る
 		public GameScreen(final MyGame game) {
@@ -31,6 +33,8 @@ public class GameScreen implements Screen{
 			this.font = new BitmapFont(); //デフォルトのフォントを使ってカウントダウン
 			font.getData().setScale(4.0f);//フォントの大きさ調整
 			this.batch = new SpriteBatch();
+			musicManager.addMusic("GameScreen", "pong.mp3");
+			musicManager.play("GameScreen");
 		}
 
 		@Override
@@ -150,14 +154,21 @@ public class GameScreen implements Screen{
 			view.dispose();
 			batch.dispose();
 			font.dispose();
+			musicManager.dispose();
 		}
 
 		private void checkForWinner() {
 			if (model.getPlayerScore() >= WINNING_SCORE) {
 				System.out.println("(GameScreen159)Player Wins!");
+				musicManager.stop();
+				musicManager.addMusic("WinScreen", "victory.mp3");
+				musicManager.play("WinScreen");
 				game.setScreen(new WinScreen(game, true)); //勝者を表示する画面に遷移
 			} else if (model.getAiScore() >= WINNING_SCORE) {
 				System.out.println("(GameScreen163)AI Wins!");
+				musicManager.stop();
+				musicManager.addMusic("LoseScreen", "gameOver.mp3");
+				musicManager.play("LoseScreen");
 				game.setScreen(new WinScreen(game, false)); //勝者を表示する画面に遷移
 			}
 		}
