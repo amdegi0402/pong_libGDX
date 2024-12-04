@@ -27,14 +27,14 @@ public class Ball {
 	}
 
 	public boolean collidesWith(Paddle paddle) {
-		return bounds.overlaps(paddle.getBounds());//パドルの衝突判定
+		return bounds.overlaps(paddle.getPaddle());//パドルの衝突判定
 	}
 
 	public void bounce() {
 		speed.x = -speed.x; //ボールが壁やパドルにぶつかったとき、進行方向を反転させる
 	}
 
-	public void doubleSpeed(float duration) {//ボール速度変更
+	public void randSpeed(float duration) {//ボール速度変更
 		int randomNum = rand.nextInt(10) + 1;//1-10の乱数発生
 		speed.scl(randomNum);
 	}
@@ -42,4 +42,22 @@ public class Ball {
 	public Rectangle getBounds() {
 		return bounds;
 	}
+	
+	public void reset() {
+		//ボールの位置を画面を中央に戻す
+		bounds.x = Gdx.graphics.getWidth() / 2;
+		bounds.y = Gdx.graphics.getWidth() / 2;
+		
+		//速度を初期状態に戻す
+		speed.set(200, 200);
+		
+		//ランダムな方向に打ち出すための処理
+		if(rand.nextBoolean()) {
+			speed.x = -speed.x;
+		}
+	}
+	
+//	public float getY() {
+//		return bounds.y; //Rectangleオブジェクトのy座標を返す
+//	}
 }

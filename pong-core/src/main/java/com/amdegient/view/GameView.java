@@ -75,11 +75,10 @@ public class GameView {
 
 		// ボールを描画
 		drawBall(model);
-		
 
 		//アイテムの描画
-		if(model.isItemActive()) {
-			Rectangle item = model.getItem(); //GameModel クラスから**アイテムの情報（位置とサイズ）**を取得
+		if (model.getItem().getIsActive()) {
+			Rectangle item = model.getItem().getItem(); //GameModel クラスから**アイテムの情報（位置とサイズ）**を取得
 			batch.draw(itemTexture, item.x, item.y, item.width, item.height);
 		}
 
@@ -95,12 +94,12 @@ public class GameView {
 	 */
 	private void drawPaddles(GameModel model) {
 		// プレイヤーのパドルの描画
-		Rectangle playerPaddle = model.getPlayerPaddle();
+		Rectangle playerPaddle = model.getPlayerPaddle().getPaddle();
 		batch.draw(paddleTexture, playerPaddle.x, playerPaddle.y,
 				playerPaddle.width, playerPaddle.height);
 
 		// AIのパドルを描画
-		Rectangle aiPaddle = model.getAiPaddle();
+		Rectangle aiPaddle = model.getAiPaddle().getPaddle();
 		batch.draw(paddleTexture, aiPaddle.x, aiPaddle.y, aiPaddle.width,
 				aiPaddle.height);
 	}
@@ -109,7 +108,7 @@ public class GameView {
 	 * ボールを描画します。
 	 */
 	private void drawBall(GameModel model) {
-		Rectangle ball = model.getBall();
+		Rectangle ball = model.getBall().getBounds();
 		batch.draw(ballTexture, ball.x, ball.y, ball.width, ball.height);
 	}
 
@@ -118,11 +117,11 @@ public class GameView {
 	 */
 	private void drawScores(GameModel model) {
 		// プレイヤーのスコア描画
-		font.draw(batch, "Player: " + model.getPlayerScore(),
+		font.draw(batch, "Player: " + model.getScore().getPlayerScore(),
 				SCORE_POSITION_X_PLAYER,
 				Gdx.graphics.getHeight() - SCORE_POSITION_Y);
 		// AIのスコア描画
-		font.draw(batch, "AI: " + model.getAiScore(),
+		font.draw(batch, "AI: " + model.getScore().getAiScore(),
 				SCORE_POSITION_X_AI,
 				Gdx.graphics.getHeight() - SCORE_POSITION_Y);
 	}

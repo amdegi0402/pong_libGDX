@@ -62,27 +62,30 @@ public class GameScreen implements Screen{
 					gameStarted = true;
 				}
 			}else {
-				System.out.println("(GameScreen72) isPause: " + model.isPause());
+				//model.getPauseManager().startPause(3);
+				//System.out.println("(GameScreen66) isPause: " + model.getPauseManager().isPaused());
 				// ゲームのロジックを更新
-				if(!model.isPause()) {
+				if(!model.getPauseManager().isPaused()) {
+					//model.getPauseManager().update(delta);
 					controller.update(delta);
+					model.update(delta);
 					// モデルの状態を更新
-					model.updateBallPosition(delta);
+					//model.updateBallPosition(delta);
+					//model.getBall().update(delta);
 				}else {
-					System.out.println("(GameScreen78) timer: " + startTimer);
-					startTimer -= delta;
-					if(startTimer <= 0) { 
-						startTimer = 2;
-						model.setPause(false);
-					}
+					//controller.update(delta);
+					//model.update(delta);
+					//System.out.println("(GameScreen75) timer: " + startTimer);
+					model.getPauseManager().update(delta);
+					
 				}
 				// ビューで描画
 				view.render(model);
 				
 				//一定時間おきにアイテムを表示
-				model.itemUpdate(delta);
+				model.update(delta);
 				
-			model.checkBallItemCollision();
+			    //model.checkBallItemCollision();
 
 				// 終了条件を確認
 				checkForWinner();
@@ -158,13 +161,13 @@ public class GameScreen implements Screen{
 		}
 
 		private void checkForWinner() {
-			if (model.getPlayerScore() >= WINNING_SCORE) {
+			if (model.getScore().getPlayerScore() >= WINNING_SCORE) {
 				System.out.println("(GameScreen159)Player Wins!");
 				musicManager.stop();
 				musicManager.addMusic("WinScreen", "victory.mp3");
 				musicManager.play("WinScreen");
 				game.setScreen(new WinScreen(game, true)); //勝者を表示する画面に遷移
-			} else if (model.getAiScore() >= WINNING_SCORE) {
+			} else if (model.getScore().getAiScore() >= WINNING_SCORE) {
 				System.out.println("(GameScreen163)AI Wins!");
 				musicManager.stop();
 				musicManager.addMusic("LoseScreen", "gameOver.mp3");
